@@ -1,50 +1,49 @@
-import { useState } from 'react';
-import GeneralInfoForm from './components/GeneralInfoForm';
-import EducationForm from './components/EducationForm';
-import ExperienceForm from './components/ExperienceForm';
-import CVPreview from './components/CVPreview';
-import './App.css';
+// src/App.jsx
+import { useState } from "react";
+import GeneralInfoForm from "./components/GeneralInfoForm";
+import EducationalForm from "./components/EducationalForm";
+import ExperienceForm from "./components/ExperienceForm";
+import CVPreview from "./components/CVPreview"; 
+import "./App.css";
 
 export default function App() {
-  // General information state
+  // Global submission toggle for the whole CV
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [generalInfo, setGeneralInfo] = useState({
-    fullName: 'Oyekanmi Blessing Ayomide',
-    email: 'blessingay5@gmail.com',
-    phone: '+2348125575562',
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
   });
 
-  // Education state
   const [educationList, setEducationList] = useState([
     {
       id: crypto.randomUUID(),
-      school: "University of Technology",
-      degree: "B.Sc. Computer Science",
-      startDate: "2020",
-      endDate: "2024",
+      school: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
     },
   ]);
 
-  // Experience state
   const [experienceList, setExperienceList] = useState([
     {
       id: crypto.randomUUID(),
-      company: "Tech Solutions Ltd",
-      position: "Frontend Developer Intern",
-      responsibilities:
-        "Built responsive UI components using React and modern CSS.",
-      startDate: "2024-01",
-      endDate: "Present",
+      company: "",
+      position: "",
+      responsibilities: "",
+      startDate: "",
+      endDate: "",
     },
   ]);
-  // create handlers for general info
+
+  // Handlers
   const handleGeneralInfoChange = (e) => {
     const { name, value } = e.target;
-    setGeneralInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value,
-    }));
+    setGeneralInfo((prev) => ({ ...prev, [name]: value }));
   };
-  // handlers for education
+
   const handleAddEducation = () => {
     setEducationList([
       ...educationList,
@@ -70,7 +69,6 @@ export default function App() {
     setEducationList(educationList.filter((edu) => edu.id !== id));
   };
 
-  //Handlers for Experience
   const handleAddExperience = () => {
     setExperienceList([
       ...experienceList,
@@ -97,38 +95,102 @@ export default function App() {
     setExperienceList(experienceList.filter((exp) => exp.id !== id));
   };
 
+  // Handle global submit & edit
+  const handleSubmitAll = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+  };
+
+  const handleEditAll = () => {
+    setIsSubmitted(false);
+  };
+
   return (
     <div className="app-container">
-      <div className="form-container">
-        <h1>CV BUILDER</h1>
-        <GeneralInfoForm
-          generalInfo={generalInfo}
-          onChange={handleGeneralInfoChange}
-        />
-        <EducationForm
-          educationList={educationList}
-          onChange={handleEducationChange}
-          onAdd={handleAddEducation}
-          onDelete={handleDeleteEducation}
-        />
-        <ExperienceForm
-          experienceList={experienceList}
-          onChange={handleExperienceChange}
-          onAdd={handleAddExperience}
-          onDelete={handleDeleteExperience}
-        />
-      </div>
+      <header
+        className="no-print"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <h1>CV Builder</h1>
+        {isSubmitted && (
+          <button
+            type="button"
+            onClick={() => window.print()}
+            style={{ backgroundColor: "#10b981", color: "white" }}
+          >
+            📄 Save as PDF
+          </button>
+        )}
+      </header>
 
-      <div className="preview-container">
-        <CVPreview
-          generalInfo={generalInfo}
-          educationList={educationList}
-          experienceList={experienceList}
-        />
-      </div>
+      {/* CONDITIONAL RENDER: If submitted, show full CV Preview. Otherwise, show forms. */}
+      {isSubmitted ? (
+        <div className="submitted-cv-wrapper">
+          <CVPreview
+            generalInfo={generalInfo}
+            educationList={educationList}
+            experienceList={experienceList}
+          />
+          <div
+            className="no-print"
+            style={{ marginTop: "2rem", textAlign: "center" }}
+          >
+            <button
+              type="button"
+              onClick={handleEditAll}
+              style={{
+                backgroundColor: "#4f46e5",
+                color: "white",
+                padding: "0.75rem 2rem",
+                fontSize: "1rem",
+              }}
+            >
+              Edit CV
+            </button>
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmitAll}>
+          <GeneralInfoForm
+            generalInfo={generalInfo}
+            onChange={handleGeneralInfoChange}
+          />
+
+          <EducationalForm
+            educationList={educationList}
+            onChange={handleEducationChange}
+            onAdd={handleAddEducation}
+            onDelete={handleDeleteEducation}
+          />
+
+          <ExperienceForm
+            experienceList={experienceList}
+            onChange={handleExperienceChange}
+            onAdd={handleAddExperience}
+            onDelete={handleDeleteExperience}
+          />
+
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#059669",
+                color: "white",
+                padding: "0.75rem 2.5rem",
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Submit CV
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
-
-
-
