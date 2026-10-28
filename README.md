@@ -17,37 +17,13 @@ A simple React project for building a professional CV/resume application. This a
 - Vite
 - CSS
 
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-4. Open the local URL shown in the terminal to view the app
-
-## Project Structure
-
-```bash
-src/
-  components/
-  App.jsx
-  main.jsx
-  styles/
-```
 
 ## Usage
 
-Edit the form fields to add your name, contact details, education, and work history. The app updates the CV preview automatically so you can see your resume as you build it.
+Edit the form fields to add your name, contact details, education, and work history.
+Click the submit button to see a preview of your CV.
+You can also download the file as pdf to get a copy of your CV
 
 ## Notes
 
-This is a beginner-friendly project focused on learning React state, components, and UI composition. You can continue improving it by adding features like print-to-PDF, theme changes, or a dark mode.
-
-## License
-
-This project is for educational purposes.
+This is a beginner-friendly project focused on learning React state, components, and UI composition. 
